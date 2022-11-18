@@ -6,36 +6,83 @@
 .main__container {
   display: grid;
   grid-template-areas: "result result result" "top top top" "numbers numbers side" "numbers numbers side";
+  height: 640px;
+  width: 640px;
+}
+.main__container .button {
+  display: flex;
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
 }
 .main__container .container__display {
   font-size: 60px;
   display: flex;
+  justify-content: right;
   grid-area: result;
+  margin-right: 23%;
 }
 .main__container .container__top-buttons {
   font-size: 40px;
   display: flex;
   grid-area: top;
   justify-content: space-around;
+  margin-right: 15%;
+  height: 40px;
 }
-.main__container .container__top-buttons .button {
-  border: 2px solid red;
+.main__container .container__top-buttons .button.delete {
+  background-color: rgb(219, 219, 219);
+  color: black;
+}
+.main__container .container__top-buttons .button.sign {
+  background-color: rgb(219, 219, 219);
+  color: black;
+}
+.main__container .container__top-buttons .button.percentage {
+  background-color: rgb(219, 219, 219);
+  color: black;
+}
+.main__container .container__top-buttons .button.division {
+  background-color: orange;
+}
+.main__container .container__top-buttons .button.division:hover {
+  background-color: white;
+  color: orange;
+}
+.main__container .container__top-buttons .button:hover {
+  background-color: rgb(153, 153, 153);
 }
 .main__container .container__number-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-area: numbers;
   font-size: 40px;
+  margin-left: 8%;
 }
 .main__container .container__number-buttons .button {
-  border: 2px solid red;
+  background-color: rgb(71, 71, 71);
+  color: rgb(182, 182, 182);
+  font-weight: 120;
+  line-height: 160%;
+}
+.main__container .container__number-buttons .button:hover {
+  background-color: rgb(153, 153, 153);
 }
 .main__container .container__side-buttons {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  flex-direction: 1fr;
   grid-area: side;
   font-size: 40px;
+  justify-content: space-between;
 }
 .main__container .container__side-buttons .button {
-  border: 2px solid red;
+  width: 60px;
+  height: 60px;
+  background-color: orange;
+}
+.main__container .container__side-buttons .button:hover {
+  background-color: white;
+  color: orange;
 }/*# sourceMappingURL=styles.css.map */

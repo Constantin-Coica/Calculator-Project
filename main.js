@@ -39,7 +39,7 @@ const operators = {
 
 numbers.forEach((element) =>{
     element.addEventListener("click", (event) =>{
-        if(display.innerHTML == 0 || activeOperand == true){
+        if((display.innerHTML == "0" || activeOperand == true) ){
         display.innerHTML = event.target.innerHTML;
         activeOperand = false;
         activeDot = false;
@@ -49,6 +49,12 @@ numbers.forEach((element) =>{
 
     });
 });
+
+numbers.forEach((element) =>{
+    element.addEventListener("mousedown", (event) =>{
+        element.classList.add(".active");
+    })
+})
 
 addition.addEventListener("click", ()=>{
 
@@ -106,7 +112,7 @@ deleteBtn.addEventListener("click", () =>{
 });
 
 zero.addEventListener("click", () =>{
-    if(display.innerHTML != 0 && toOperateOn.length != 2){
+    if(display.innerHTML != "0" && toOperateOn.length != 2){
         display.innerHTML += 0;
     } else {
         display.innerHTML = 0;
@@ -117,6 +123,11 @@ dotBtn.addEventListener("click", ()=>{
     if(!activeDot){
         activeDot = true;
         display.innerHTML += ".";
+    }
+
+    if(!activeDot && display.innerHTML == 0){
+        activeDot = true;
+        display.innerHTML = "0.";
     }
 });
 
