@@ -1,0 +1,119 @@
+*{
+    background-color: black;
+    color: white;
+}
+
+.main__container{
+    display: grid;
+    grid-template-areas: "result result result"
+    "top top top"
+    "numbers numbers side"
+    "numbers numbers side";
+    height:640px;
+    width:640px;
+
+    .button{
+        display: flex;
+        border-radius: 50px;
+        width: 60px;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+    }
+    .container__display{
+        font-size: 60px;
+        display:flex;
+        justify-content: right;
+        grid-area:result;margin-right: 23%;
+    }
+
+    .container__top-buttons{
+        font-size: 40px;
+        display: flex;
+        grid-area: top;
+        justify-content: space-around;
+        margin-right: 15%;
+        height:40px;
+
+
+        .button.delete{
+            background-color: rgb(219, 219, 219);
+            color: black;
+        }
+
+        .button.sign{
+            background-color: rgb(219, 219, 219);
+            color:black;
+        }
+
+        .button.percentage{
+            background-color: rgb(219, 219, 219);
+            color: black;
+        }
+
+        .button.division{
+            background-color: orange;   
+        }
+
+        .button.division:hover{
+            background-color: orange;
+            color: white;
+        }
+
+        .active{
+            background-color: white;
+            color: orange;
+        }
+
+        .button:hover{
+            background-color:rgb(153, 153, 153);
+        }
+    }
+
+    .container__number-buttons{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-area:numbers;
+        font-size:40px;
+        margin-left: 8%;
+        .button{
+            background-color: rgb(71, 71, 71);
+            color:rgb(182, 182, 182);
+            font-weight: 120;
+            line-height: 160%;
+        }
+
+        .button:hover{
+            background-color: rgb(153, 153, 153);
+        }
+
+        
+    }
+
+    .container__side-buttons{
+        display: grid;
+        flex-direction: 1fr;
+        grid-area: side;
+        font-size: 40px;
+        justify-content: space-between;
+        
+
+        .button{
+            width: 60px;
+            height: 60px;
+            background-color: orange;
+        }
+
+        .active{
+            background-color: white;
+            color: orange;
+        }
+        .button.equals:hover{
+            background-color: white;
+            color:orange;
+        }
+
+
+    }
+}
+
