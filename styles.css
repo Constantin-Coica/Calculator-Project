@@ -1,13 +1,12 @@
-* {
+.main__container {
   background-color: black;
   color: white;
-}
-
-.main__container {
   display: grid;
   grid-template-areas: "result result result" "top top top" "numbers numbers side" "numbers numbers side";
   height: 640px;
-  width: 640px;
+  width: 550px;
+  margin: auto;
+  margin-top: 10%;
 }
 .main__container .button {
   display: flex;

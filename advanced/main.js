@@ -16,7 +16,8 @@ calculator = {
     divideActive: false,
     multiplyActive: false,
     equation : [],
-    previousState: [["0"]]
+    previousState: ["0"],
+    dotActive: false,
 };
 
 const initialiseButtonNumbers = (calculator, docElement)=>{
@@ -151,43 +152,269 @@ const deActivateAll = (calculator) =>{
     calculator.divideActive = false;
     divisionBtn.classList.remove("active");
     calculator.multiplyActive = false;
-    multiplication.classList.remove = false;
+    multiplication.classList.remove("active");
 }
 
-const doMathematics = (equation) =>{
+const doMathematics = (equation) => {
     let sum = 0;
-    
-    while(equation.indexOf("*")!=-1 && equation.indexOf("/")!=-1){
-        let newArr = [];
-        let priority = equation.indexOf("*") < equation.indexOf("/") ? equation.indexOf("*"):equation.indexOf("/");
-        let firstNo = Number(equation[priority-1]);
-        let secondNo = Number(equation[priority+1]);
-        let operation = operators[equation[priority]](firstNo,secondNo);
-        for(let index = 0; index < priority-1; index++){
-            newArr.push(equation.shift());
+    let operation = 0;
+  
+    while (equation.indexOf("*") != -1 || equation.indexOf("/") != -1) {
+      let newArr = [];
+      if (equation.indexOf("*") != -1 && equation.indexOf("/") != -1) {
+        let priority =
+          equation.indexOf("*") < equation.indexOf("/")
+            ? equation.indexOf("*")
+            : equation.indexOf("/");
+        let firstNo = Number(equation[priority - 1]);
+        let secondNo = Number(equation[priority + 1]);
+        operation = operators[equation[priority]](firstNo, secondNo);
+        for (let index = 0; index < priority - 1; index++) {
+          newArr.push(equation.shift());
         }
-        equation.shift();
-        equation.shift();
-        equation.shift();
-        equation.unshift(operation);
-        for(let index = newArr.length-1; index >=0; index--){
-            equation.unshift(newArr[index]);
+      } else if (equation.indexOf("*") != -1 && equation.indexOf("/") == -1) {
+        let priority = equation.indexOf("*");
+        let firstNo = Number(equation[priority - 1]);
+        let secondNo = Number(equation[priority + 1]);
+  
+        operation = operators[equation[priority]](firstNo, secondNo);
+  
+        for (let index = 0; index < priority - 1; index++) {
+          newArr.push(equation.shift());
         }
+      } else if (equation.indexOf("/") != -1 && equation.indexOf("*") == -1) {
+        let priority = equation.indexOf("/");
+        let firstNo = Number(equation[priority - 1]);
+        let secondNo = Number(equation[priority + 1]);
+  
+        operation = operators[equation[priority]](firstNo, secondNo);
+  
+        for (let index = 0; index < priority - 1; index++) {
+          newArr.push(equation.shift());
+        }
+      }
+      console.log(newArr);
+  
+      equation.shift();
+      equation.shift();
+      equation.shift();
+      equation.unshift(operation);
+      for (let index = newArr.length - 1; index >= 0; index--) {
+        equation.unshift(newArr[index]);
+      }
     }
-
+  
     counter = 1;
-    while(equation.length!=0){
-        let firstNo = Number(equation[counter-1]);
-        let secondNo = Number(equation[counter+1]);
-        sum+=operators[equation[index]](firstNo,secondNo);
-        equation.shift();
-        equation.shift();
-        equation.shift();
-        counter +=2;
+    while (equation.length != 1) {
+      let firstNo = Number(equation[counter - 1]);
+      let secondNo = Number(equation[counter + 1]);
+      let operand = equation[counter];
+      sum = operators[operand](firstNo, secondNo);
+      equation.shift();
+      equation.shift();
+      equation.shift();
+      equation.unshift(sum);
+    }
+  
+    return equation;
+  };
+
+const handleAddition = ()=>{
+    if(calculator.plusActive == false){
+    const getPreviousState = calculator.previousState.length;
+    if(getPreviousState == 1){
+    calculator.plusActive = true;
+    addition.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "+";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("+");
+    calculator.previousState.push(newState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+    } else{
+    calculator.plusActive = true;
+    addition.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "+";
+    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+    const lastElement = display.innerHTML.slice(toSlice);
+    calculator.equation.push(lastElement);
+    calculator.equation.push("+");
+    calculator.previousState.push(newState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+
+    }
+}
+}
+
+const handleSubstraction = ()=>{
+    if(calculator.minusActive == false){
+    const getPreviousState = calculator.previousState.length;
+    if(getPreviousState == 1){
+    calculator.minusActive = true;
+    substraction.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "-";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("-");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+    } else{
+    calculator.minusActive = true;
+    substraction.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "-";
+    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+    const lastElement = display.innerHTML.slice(toSlice);
+    calculator.equation.push(lastElement);
+    calculator.equation.push("-");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+
+    }
+}
+}
+
+const handleMultiplication = ()=>{
+    if(calculator.multiplyActive == false){
+    const getPreviousState = calculator.previousState.length;
+    if(getPreviousState == 1){
+    calculator.multiplyActive = true;
+    multiplication.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "x";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("*");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+    } else{
+    calculator.multiplyActive = true;
+    multiplication.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "x";
+    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+    const lastElement = display.innerHTML.slice(toSlice);
+    calculator.equation.push(lastElement);
+    calculator.equation.push("*");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+
+    }
+}
+}
+
+
+const handleDivision = ()=>{
+    if(calculator.divideActive == false){
+    const getPreviousState = calculator.previousState.length;
+    if(getPreviousState == 1){
+    calculator.divideActive = true;
+    divisionBtn.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "/";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("/");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+    } else{
+    calculator.divide = true;
+    divisionBtn.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "/";
+    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+    const lastElement = display.innerHTML.slice(toSlice);
+    calculator.equation.push(lastElement);
+    calculator.equation.push("/");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+    calculator.dotActive = false;
+
+    }
+}
+}
+
+const handleEquals = ()=>{
+    if(calculator.equation.length > 0){
+    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+    const lastElement = display.innerHTML.slice(toSlice);
+    calculator.equation.push(lastElement);
+    const result = doMathematics(calculator.equation)[0];
+    display.innerHTML=result;
+    calculator.equation = [];
+    calculator.previousState = [result.toString()];
+    if(Number.isInteger(result)){
+        calculator.dotActive = false;
+    } else{
+        calculator.dotActive = true;
+    }
+    }
+}
+
+const changeSign = ()=>{
+    const getPreviousState = calculator.previousState.length;
+    if(getPreviousState == 1){
+    display.innerHTML = -display.innerHTML;
+    } else {
+        const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+        let lastElement = display.innerHTML.slice(toSlice);
+        lastElement = (-lastElement).toString();
+        lastElement = calculator.previousState[calculator.previousState.length-1] + lastElement;
+        display.innerHTML = lastElement;
+
+
     }
 
-    return sum;
-    
+}
+
+const doPercentage = ()=>{
+    if(calculator.equation.length >0 ){
+    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+    const lastElement = display.innerHTML.slice(toSlice);
+    calculator.equation.push(lastElement);
+    const result = doMathematics(calculator.equation)[0]/100;
+    display.innerHTML=result;
+    calculator.equation = [];
+    calculator.previousState = [result.toString()];
+    } else {
+        const percentageDone = Number(display.innerHTML)/100
+        display.innerHTML = percentageDone;
+    }
+
+}
+
+/*const doUndo = ()=>{
+    if(calculator.previousState.length > 1){
+        const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+        const lastElement = display.innerHTML.slice(toSlice);
+        calculator.equation.push(lastElement);
+        display.innerHTML = calculator.previousState[calculator.previousState.length-1];
+        calculator.previousState.pop();
+        console.log(calculator.previousState)
+        calculator.equation.pop();
+        console.log(calculator.equation);
+    } else {
+        display.innerHTML = calculator.previousState[0];
+        calculator.equation = [];
+    }
+}*/
+
+const clearAll = ()=>{
+    calculator.equation = [];
+    calculator.previousState = ["0"];
+    display.innerHTML = "0";
 }
 
 const display = document.querySelector(".container__display");
@@ -221,60 +448,53 @@ numbers.forEach(element =>{
 });
 
 addition.addEventListener("click", () =>{
-    calculator.plusActive = true;
-    addition.classList.add("active")
-    let newState = display.innerHTML;
-    newState += "+";
-    calculator.equation.push(display.innerHTML);
-    calculator.equation.push("+");
-    calculator.previousState.push(newState);
-    console.log(calculator.previousState);
-    display.innerHTML=newState;
+    handleAddition();
 });
 
 substraction.addEventListener("click", () =>{
-    calculator.minusActive = true;
-    substraction.classList.add("active")
-    let newState = display.innerHTML;
-    newState += "-";
-    calculator.equation.push(display.innerHTML);
-    calculator.equation.push("/");
-    calculator.previousState.push(newState);
-    console.log(calculator.previousState);
-    display.innerHTML=newState;
+    handleSubstraction();
 });
 
 divisionBtn.addEventListener("click", () =>{
-    calculator.divideActive = true;
-    divisionBtn.classList.add("active")
-    let newState = display.innerHTML;
-    newState += "/";
-    calculator.equation.push(display.innerHTML);
-    calculator.equation.push("/");
-    calculator.previousState.push(newState);
-    console.log(calculator.previousState);
-    display.innerHTML=newState;
+    handleDivision();
 });
 
 multiplication.addEventListener("click", () =>{
-    calculator.multiplyActive = true;
-    multiplication.classList.add("active")
-    let newState = display.innerHTML;
-    newState += "x";
-    calculator.equation.push(display.innerHTML);
-    calculator.equation.push("*");
-    calculator.previousState.push(newState);
-    console.log(calculator.previousState);
-    display.innerHTML=newState;
+    handleMultiplication();
 });
 
 equalsBtn.addEventListener("click", () =>{
-    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
-    const lastElement = display.innerHTML.slice(toSlice);
-    calculator.equation.push(lastElement);
+    handleEquals();
 
 });
 
+sign.addEventListener("click", () =>{
+    changeSign();
+})
+
+percentage.addEventListener("click", ()=>{
+    doPercentage();
+})
+
+zero.addEventListener("click",() =>{
+    if(display.innerHTML != "0"){
+        display.innerHTML += "0"
+    }
+})
+
+dotBtn.addEventListener("click",()=>{
+    if(calculator.dotActive == false){
+        display.innerHTML += "."
+    }
+})
+
+/*undoBtn.addEventListener("click", () =>{
+    doUndo();
+})*/
+
+deleteBtn.addEventListener("click", ()=>{
+    clearAll();
+})
 
 
 

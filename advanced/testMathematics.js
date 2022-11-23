@@ -78,8 +78,8 @@ const doMathematics = (equation) => {
     equation.shift();
     equation.unshift(sum);
   }
-
+  console.log(equation);
   return equation;
 };
 
-console.log(doMathematics(["1", "+", "4", "*", "2", "/", "2"]));
+console.log(doMathematics(["8", "*", "3", "/", "3"]));
