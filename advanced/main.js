@@ -12,7 +12,7 @@ calculator = {
     clearBtn:"AC",
     undo: "Undo",
     plusActive: false,
-    plusActive: false,
+    minusActive: false,
     divideActive: false,
     multiplyActive: false,
     equation : [],
@@ -42,7 +42,7 @@ const initialiseButtonNumbers = (calculator, docElement)=>{
 
     item = document.createElement("button");
     item.innerHTML = calculator.undo;
-    item.classList.add("button")
+    item.classList.add("button","undo")
     buttons.appendChild(item);
 
     docElement.appendChild(buttons);
@@ -109,7 +109,7 @@ const initialise = (calculator, body) =>{
 
     const display = document.createElement("div");
     display.classList.add("container__display");
-    display.innerHTML = "0";
+    display.innerHTML = calculator.numberZero;
     container.appendChild(display);
 
     initaliseButtonsTop(calculator,container);
@@ -139,6 +139,57 @@ const operators = {
     }
 }
 
+const checkIfActive = (calculator) => {
+    return calculator.plusActive || calculator.minusActive || calculator.divideActive || calculator.multiplyActive;
+}
+
+const deActivateAll = (calculator) =>{
+    calculator.plusActive = false;
+    addition.classList.remove("active");
+    calculator.minusActive = false;
+    substraction.classList.remove("active");
+    calculator.divideActive = false;
+    divisionBtn.classList.remove("active");
+    calculator.multiplyActive = false;
+    multiplication.classList.remove = false;
+}
+
+const doMathematics = (equation) =>{
+    let sum = 0;
+    
+    while(equation.indexOf("*")!=-1 && equation.indexOf("/")!=-1){
+        let newArr = [];
+        let priority = equation.indexOf("*") < equation.indexOf("/") ? equation.indexOf("*"):equation.indexOf("/");
+        let firstNo = Number(equation[priority-1]);
+        let secondNo = Number(equation[priority+1]);
+        let operation = operators[equation[priority]](firstNo,secondNo);
+        for(let index = 0; index < priority-1; index++){
+            newArr.push(equation.shift());
+        }
+        equation.shift();
+        equation.shift();
+        equation.shift();
+        equation.unshift(operation);
+        for(let index = newArr.length-1; index >=0; index--){
+            equation.unshift(newArr[index]);
+        }
+    }
+
+    counter = 1;
+    while(equation.length!=0){
+        let firstNo = Number(equation[counter-1]);
+        let secondNo = Number(equation[counter+1]);
+        sum+=operators[equation[index]](firstNo,secondNo);
+        equation.shift();
+        equation.shift();
+        equation.shift();
+        counter +=2;
+    }
+
+    return sum;
+    
+}
+
 const display = document.querySelector(".container__display");
 const deleteBtn = document.querySelector(".button.delete");
 const sign = document.querySelector(".button.sign");
@@ -154,13 +205,81 @@ const substraction = document.querySelector(".button.substraction");
 const addition = document.querySelector(".button.addition");
 const equalsBtn = document.querySelector(".button.equals");
 
+const undoBtn = document.querySelector(".button.undo");
+
 numbers.forEach(element =>{
     element.addEventListener("click", event =>{
-        if(display.innerHTML == 0){
+        if(display.innerHTML == 0 && !checkIfActive(calculator)){
             display.innerHTML = calculator.numbers[event.target.innerHTML-1];
+        } else if(checkIfActive) {
+            display.innerHTML += calculator.numbers[event.target.innerHTML-1];
+            deActivateAll(calculator);
+        } else {
+            display.innerHTML += calculator.nuumbers[event.target.innerHTML-1]
         }
     })
-})
+});
+
+addition.addEventListener("click", () =>{
+    calculator.plusActive = true;
+    addition.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "+";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("+");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+});
+
+substraction.addEventListener("click", () =>{
+    calculator.minusActive = true;
+    substraction.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "-";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("/");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+});
+
+divisionBtn.addEventListener("click", () =>{
+    calculator.divideActive = true;
+    divisionBtn.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "/";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("/");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+});
+
+multiplication.addEventListener("click", () =>{
+    calculator.multiplyActive = true;
+    multiplication.classList.add("active")
+    let newState = display.innerHTML;
+    newState += "x";
+    calculator.equation.push(display.innerHTML);
+    calculator.equation.push("*");
+    calculator.previousState.push(newState);
+    console.log(calculator.previousState);
+    display.innerHTML=newState;
+});
+
+equalsBtn.addEventListener("click", () =>{
+    const toSlice = calculator.previousState[calculator.previousState.length-1].length;
+    const lastElement = display.innerHTML.slice(toSlice);
+    calculator.equation.push(lastElement);
+
+});
+
+
+
+
+
+
 
 
 
